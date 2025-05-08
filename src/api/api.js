@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Your production & local fallback URLs
-const PROD_URL = "https://campmeeting-prod-f2b77d417fab.herokuapp.com/api/";
+const PROD_URL = "https://campmeeting-prod-f2b77d417fab.herokuapp.com/api/api/";
 const LOCAL_URL = "http://localhost:8000/api/";
 
 // Choose baseURL in this order:
