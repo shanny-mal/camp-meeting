@@ -1,15 +1,10 @@
+// File: src/pages/AdminDashboard.jsx
+
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  Card,
-  Row,
-  Col,
-  Table,
-  Form,
-  Button,
-  Pagination,
-} from "react-bootstrap";
+import { Card, Row, Col, Table, Form, Badge } from "react-bootstrap";
 import { toast } from "react-toastify";
 import * as regApi from "../api/registration";
+import LoadingButton from "../components/LoadingButton";
 import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
@@ -18,6 +13,9 @@ export default function AdminDashboard() {
   const [filters, setFilters] = useState({ campsite: "", tshirt_size: "" });
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
+  const [loadingDownload, setLoadingDownload] = useState(false);
+  const [markingIds, setMarkingIds] = useState(new Set());
+  const [markedIds, setMarkedIds] = useState(new Set());
   const pageSize = 10;
 
   // Load data
@@ -25,7 +23,9 @@ export default function AdminDashboard() {
     regApi
       .getAllRegistrations()
       .then((data) => setRegs(data))
-      .catch(() => toast.error("Failed to fetch registrations"));
+      .catch(() =>
+        toast.error("Failed to fetch registrations", { autoClose: 2000 })
+      );
   }, []);
 
   // Filtered + searched data
@@ -60,41 +60,59 @@ export default function AdminDashboard() {
     toast.success("Filters reset!", { autoClose: 2000 });
   };
 
-  const handleDownload = () => {
-    regApi
-      .downloadCSV()
-      .then(() => toast.success("CSV downloaded!", { autoClose: 2000 }))
-      .catch(() => toast.error("Failed to download CSV"));
+  const handleDownload = async () => {
+    setLoadingDownload(true);
+    try {
+      await regApi.downloadCSV();
+      toast.success("CSV downloaded!", { autoClose: 2000 });
+    } catch {
+      toast.error("Failed to download CSV", { autoClose: 2000 });
+    } finally {
+      setLoadingDownload(false);
+    }
   };
 
-  const handleMarkAttendance = (regId, name) => {
-    regApi
-      .markAttendance(regId)
-      .then(() =>
-        toast.success(`Attendance marked for ${name}`, { autoClose: 2000 })
-      )
-      .catch(() => toast.error("Failed to mark attendance"));
+  const handleMarkAttendance = async (regId, name) => {
+    setMarkingIds((ids) => new Set(ids).add(regId));
+    try {
+      await regApi.markAttendance(regId);
+      setMarkedIds((ids) => new Set(ids).add(regId));
+      toast.success(`Attendance marked for ${name}`, { autoClose: 2000 });
+    } catch {
+      toast.error("Failed to mark attendance", { autoClose: 2000 });
+    } finally {
+      setMarkingIds((ids) => {
+        const newSet = new Set(ids);
+        newSet.delete(regId);
+        return newSet;
+      });
+    }
   };
 
   return (
-    <Card className="admin-card my-5 mx-3">
-      <Card.Header className="d-flex align-items-center justify-content-between">
+    <Card className="admin-card shadow-sm my-5 mx-3">
+      <Card.Header className="d-flex align-items-center justify-content-between bg-white py-3 px-4">
         <h4 className="mb-0">Admin Dashboard</h4>
-        <Button variant="warning" onClick={handleDownload}>
+        <LoadingButton
+          loading={loadingDownload}
+          variant="warning"
+          onClick={handleDownload}
+          size="sm"
+        >
           <i className="bi bi-download me-1" /> Download CSV
-        </Button>
+        </LoadingButton>
       </Card.Header>
 
-      <Card.Body>
-        {/* Filters */}
-        <Row className="g-3 mb-4">
+      <Card.Body className="px-4">
+        {/* Filters & Search */}
+        <Row className="align-items-center g-3 mb-4">
           <Col md={3}>
             <Form.Select
               size="lg"
               value={filters.campsite}
               onChange={(e) => handleFilterChange("campsite", e.target.value)}
             >
-              <option value="">All campsites</option>
+              <option value="">All Campsites</option>
               <option>Gache Gache</option>
               <option>Lakeview</option>
               <option>Prison Ministries</option>
@@ -108,11 +126,9 @@ export default function AdminDashboard() {
                 handleFilterChange("tshirt_size", e.target.value)
               }
             >
-              <option value="">All sizes</option>
+              <option value="">All T-Shirt Sizes</option>
               {["S", "M", "L", "XL", "XXL"].map((sz) => (
-                <option key={sz} value={sz}>
-                  {sz}
-                </option>
+                <option key={sz}>{sz}</option>
               ))}
             </Form.Select>
           </Col>
@@ -128,7 +144,7 @@ export default function AdminDashboard() {
               }}
             />
           </Col>
-          <Col md={2} className="d-flex align-items-center">
+          <Col md={2} className="text-end">
             <Button variant="link" onClick={resetFilters}>
               Reset Filters
             </Button>
@@ -138,14 +154,14 @@ export default function AdminDashboard() {
         {/* Table */}
         <div className="table-responsive mb-4">
           <Table striped hover className="mb-0">
-            <thead>
+            <thead className="table-light">
               <tr>
                 <th>Name</th>
                 <th>Campsite</th>
                 <th>Email</th>
                 <th>T-Shirt</th>
                 <th>Visitors</th>
-                <th>Actions</th>
+                <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -156,14 +172,19 @@ export default function AdminDashboard() {
                   <td>{r.email}</td>
                   <td>{r.tshirt_size}</td>
                   <td>{r.visitors}</td>
-                  <td>
-                    <Button
-                      size="sm"
-                      variant="outline-primary"
-                      onClick={() => handleMarkAttendance(r.id, r.full_name)}
-                    >
-                      Mark Attendance
-                    </Button>
+                  <td className="text-center">
+                    {markedIds.has(r.id) ? (
+                      <Badge bg="success">Marked</Badge>
+                    ) : (
+                      <LoadingButton
+                        loading={markingIds.has(r.id)}
+                        size="sm"
+                        variant="outline-primary"
+                        onClick={() => handleMarkAttendance(r.id, r.full_name)}
+                      >
+                        Mark
+                      </LoadingButton>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -180,25 +201,29 @@ export default function AdminDashboard() {
 
         {/* Pagination */}
         {pageCount > 1 && (
-          <Pagination className="justify-content-center">
-            <Pagination.Prev
-              onClick={() => setPage((p) => Math.max(p - 1, 0))}
-              disabled={page === 0}
-            />
-            {[...Array(pageCount)].map((_, i) => (
-              <Pagination.Item
-                key={i}
-                active={i === page}
-                onClick={() => setPage(i)}
-              >
-                {i + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              onClick={() => setPage((p) => Math.min(p + 1, pageCount - 1))}
-              disabled={page === pageCount - 1}
-            />
-          </Pagination>
+          <Row>
+            <Col className="d-flex justify-content-center">
+              <Pagination>
+                <Pagination.Prev
+                  onClick={() => setPage((p) => Math.max(p - 1, 0))}
+                  disabled={page === 0}
+                />
+                {[...Array(pageCount)].map((_, i) => (
+                  <Pagination.Item
+                    key={i}
+                    active={i === page}
+                    onClick={() => setPage(i)}
+                  >
+                    {i + 1}
+                  </Pagination.Item>
+                ))}
+                <Pagination.Next
+                  onClick={() => setPage((p) => Math.min(p + 1, pageCount - 1))}
+                  disabled={page === pageCount - 1}
+                />
+              </Pagination>
+            </Col>
+          </Row>
         )}
       </Card.Body>
     </Card>

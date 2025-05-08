@@ -30,3 +30,30 @@
   background-color: #0057B7;
   border-color: #0057B7;
 }
+
+/* File: src/pages/AdminDashboard.css */
+
+
+.admin-card .table-responsive {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.admin-card table th,
+.admin-card table td {
+  vertical-align: middle;
+}
+
+.admin-card .btn-link {
+  color: var(--bs-secondary);
+  text-decoration: none;
+}
+
+.admin-card .btn-link:hover {
+  text-decoration: underline;
+}
+
+/* Ensure LoadingButton spinners align nicely */
+.admin-card .btn-loading {
+  min-width: 90px;
+}

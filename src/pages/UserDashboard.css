@@ -1,50 +1,48 @@
 /* File: src/pages/UserDashboard.css */
 
-.user-card {
-  max-width: 600px;
-  margin: 2rem auto;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.user-dashboard-wrapper {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 
-.user-card .card-header {
+.user-card {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 0.5rem;
+}
+
+.logout-btn {
+  font-size: 0.9rem;
+  color: #dc3545; /* Bootstrap danger */
+}
+
+.logout-btn:hover {
+  text-decoration: underline;
+}
+
+.details-list .list-group-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background-color: #0057B7;
-  color: #fff;
-  padding: 1rem 1.5rem;
-  border-bottom: none;
+  padding: 0.75rem 1.25rem;
 }
 
-.user-card .card-header h5 {
-  margin: 0;
-  font-size: 1.25rem;
+.attendance-footer {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-top: 1px solid #e9ecef;
 }
 
-.user-card .card-body {
-  padding: 1.5rem;
-}
-
-.user-card .details-list dt {
-  font-weight: 600;
-  color: #333;
-}
-.user-card .details-list dd {
-  margin-bottom: 1rem;
-  color: #555;
-}
-
-.user-card .attendance-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #dee2e6;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+.attendance-badge {
+  font-size: 1rem;
+  padding: 0.5em 1em;
 }
 
 .spinner-center {
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 2rem;
+  height: 100%;
 }
