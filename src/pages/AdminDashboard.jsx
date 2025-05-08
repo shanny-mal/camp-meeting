@@ -1,7 +1,16 @@
 // File: src/pages/AdminDashboard.jsx
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Card, Row, Col, Table, Form, Badge } from "react-bootstrap";
+import {
+  Card,
+  Row,
+  Col,
+  Table,
+  Form,
+  Badge,
+  Button,
+  Pagination,
+} from "react-bootstrap";
 import { toast } from "react-toastify";
 import * as regApi from "../api/registration";
 import LoadingButton from "../components/LoadingButton";
