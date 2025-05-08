@@ -1,0 +1,118 @@
+/* 1. Color Variables */
+:root {
+  --navbar-bg: #0057B7;    /* Kariba Blue */
+  --accent: #FFB300;       /* Sun Yellow */
+  --text-light: #ffffff;
+  --text-dark: #333333;
+}
+
+/* 2. Navbar Base */
+.navbar-custom {
+  background-color: var(--navbar-bg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-bottom: 3px solid var(--accent);
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+}
+
+/* 3. Brand/Logo */
+.brand-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-light) !important;
+  letter-spacing: 0.05em;
+  margin-right: 2rem;
+}
+
+/* 4. Nav Links */
+.nav-link-custom {
+  color: var(--text-light) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0.5rem;
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.nav-link-custom:hover {
+  background-color: var(--accent);
+  color: var(--text-dark) !important;
+  border-radius: 0.25rem;
+  transform: translateY(-2px);
+}
+/* Active underline */
+.navbar-custom .nav-link-custom.active {
+  color: var(--accent) !important;
+}
+.navbar-custom .nav-link-custom.active::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 10%;
+  width: 80%;
+  height: 3px;
+  background-color: var(--accent);
+  border-radius: 2px;
+}
+
+/* 5. Hamburger Toggler */
+.custom-toggler {
+  border: none;
+}
+.custom-toggler .navbar-toggler-icon {
+  filter: invert(1);
+  transition: transform 0.3s ease;
+}
+/* Rotate when open */
+.custom-toggler:not(.collapsed) .navbar-toggler-icon {
+  transform: rotate(90deg);
+}
+
+/* Full-screen on mobile */
+@media (min-width: 992px) {
+  .custom-collapse {
+    transform: none !important;
+    transition: none !important;
+    background-color: transparent !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .custom-toggler {
+    display: none; /* hide the hamburger at desktop */
+  }
+}
+
+@media (max-width: 992px) {
+  .custom-collapse {
+    transform: translateX(-100%);
+    transition: transform 0.4s ease-out;
+    background-color: var(--navbar-bg);
+    position: absolute;
+    top: 56px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    z-index: 1000;
+  }
+  .custom-collapse.show {
+    transform: translateX(0);
+  }
+  .custom-toggler {
+    display: block;
+  }
+}
+
+/* 7. Logout Avatar Link */
+.logout-link {
+  padding: 0 0.5rem;
+}
+
+/* 8. Optional Overrides (Search & ThemeToggle) */
+.navbar-custom .form-control {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: var(--text-light);
+}

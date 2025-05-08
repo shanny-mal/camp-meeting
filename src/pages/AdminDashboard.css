@@ -1,0 +1,32 @@
+/* Card styling */
+.admin-card {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.admin-card .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Filters spacing */
+.admin-card .form-select,
+.admin-card .form-control {
+  border-radius: 0.25rem;
+}
+
+/* Table container */
+.admin-card .table-responsive {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Pagination */
+.admin-card .pagination .page-item .page-link {
+  color: #0057B7;
+}
+.admin-card .pagination .page-item.active .page-link {
+  background-color: #0057B7;
+  border-color: #0057B7;
+}

@@ -1,0 +1,50 @@
+/* File: src/pages/UserDashboard.css */
+
+.user-card {
+  max-width: 600px;
+  margin: 2rem auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.user-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0057B7;
+  color: #fff;
+  padding: 1rem 1.5rem;
+  border-bottom: none;
+}
+
+.user-card .card-header h5 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.user-card .card-body {
+  padding: 1.5rem;
+}
+
+.user-card .details-list dt {
+  font-weight: 600;
+  color: #333;
+}
+.user-card .details-list dd {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.user-card .attendance-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #dee2e6;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.spinner-center {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}

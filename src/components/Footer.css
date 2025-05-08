@@ -1,0 +1,16 @@
+/* ================================================
+   Footer Styles
+   ================================================ */
+.footer-custom {
+  background-color: var(--navbar-bg);
+  color: var(--text-light);
+  border-top: 3px solid var(--accent);
+  padding: 1rem 0;
+}
+.footer-custom a {
+  color: var(--text-light);
+  text-decoration: underline;
+}
+.footer-custom a:hover {
+  color: var(--accent);
+}

@@ -1,0 +1,111 @@
+/* ================================================
+   Global Variables & Resets
+   ================================================ */
+:root {
+  --navbar-bg: #0057B7;       /* Kariba Blue */
+  --accent: #FFB300;          /* Sun Yellow */
+  --text-light: #FFFFFF;
+  --text-dark: #333333;
+  --input-bg: rgba(255,255,255,0.15);
+  --input-focus-bg: rgba(255,255,255,0.9);
+}
+
+body {
+  margin: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Dark mode overrides */
+body.dark-mode {
+  --navbar-bg: #212529;
+  --input-bg: rgba(255,255,255,0.1);
+  --text-light: #F8F9FA;
+  --text-dark: #E9ECEF;
+}
+
+/* ================================================
+   SearchInput Styles
+   ================================================ */
+.search-input-wrapper {
+  position: relative;
+  margin-left: 1rem;
+}
+.search-icon-button {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.25rem;
+  transition: color 0.2s ease;
+}
+.search-icon-button:hover {
+  color: var(--accent);
+}
+.search-input {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 0;
+  opacity: 0;
+  background: var(--input-bg);
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: var(--text-light);
+  padding: 0.25rem 0.5rem;
+  transition: width 0.3s ease, opacity 0.3s ease, background 0.3s, border 0.3s;
+}
+.search-input.expanded {
+  width: 150px;
+  opacity: 1;
+  background: var(--input-focus-bg);
+  border-color: var(--accent);
+  color: var(--text-dark);
+}
+
+/* ================================================
+   ThemeToggle Styles
+   ================================================ */
+.theme-toggle-btn {
+  font-size: 1.25rem;
+  color: var(--text-light);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.theme-toggle-btn:hover {
+  background: var(--accent);
+  color: var(--text-dark);
+}
+
+/* ================================================
+   Avatar Styles
+   ================================================ */
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--text-dark);
+  color: var(--text-light);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* ================================================
+   NavLink Styles
+   ================================================ */
+.nav-link-custom {
+  color: var(--text-light) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.nav-link-custom:hover {
+  color: var(--accent) !important;
+  transform: translateY(-2px);
+}
+.nav-link-custom.active {
+  color: var(--accent) !important;
+}
+
+

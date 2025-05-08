@@ -1,0 +1,59 @@
+/* Full‑viewport hero with gradient + overlay */
+.notfound-hero {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+.notfound-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Centered card */
+.notfound-card {
+  max-width: 500px;
+  width: 100%;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  background: #fff;
+  overflow: hidden;
+}
+
+/* Fade‑and‑slide‑up animation */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-slide-up {
+  animation: fadeSlideUp 0.6s ease-out both;
+}
+
+/* Button hover scale & shadow */
+.btn-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-hover:hover,
+.btn-hover:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Search button inside input group */
+.input-group .btn-search {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Ensure focus outlines are visible */
+:focus-visible {
+  outline: 3px solid #0057B7;
+  outline-offset: 2px;
+}
