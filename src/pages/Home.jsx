@@ -1,13 +1,19 @@
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Carousel, Container, Row, Col } from "react-bootstrap";
+import {
+  Carousel,
+  Container,
+  Row,
+  Col,
+  Card,
+  ListGroup,
+} from "react-bootstrap";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./Home.css";
 
 import { AuthContext } from "../contexts/AuthContext";
 import Button from "../components/Button";
-import SpeakerCard from "../components/SpeakerCard";
 
 const images = [
   "/images/slider1.jpg",
@@ -15,24 +21,6 @@ const images = [
   "/images/slider3.jpg",
   "/images/slider4.jpg",
   "/images/slider5.jpg",
-];
-
-const speakers = [
-  {
-    name: "Pastor John Banda",
-    title: "Lead Pastor",
-    imgUrl: "/images/DSC_0163.jpg",
-  },
-  {
-    name: "Sister Mary Chirwa",
-    title: "Youth Minister",
-    imgUrl: "/images/speaker2.jpg",
-  },
-  {
-    name: "Dr. Tendai Mwale",
-    title: "Health Evangelist",
-    imgUrl: "/images/speaker3.jpg",
-  },
 ];
 
 export default function Home() {
@@ -81,20 +69,82 @@ export default function Home() {
         ))}
       </Carousel>
 
-      {/* Speakers Section */}
-      <Container className="py-5">
-        <h2 className="text-center mb-4">Speakers</h2>
+      {/* 1. Welcome Remarks */}
+      <Container>
+        <Card className="shadow-sm rounded home-welcome-card mb-5">
+          <Card.Header className="fs-4 fw-bold">Welcome Remarks</Card.Header>
+          <Card.Body>
+            <p className="mb-3">Dear Beloved Kariba District Family,</p>
+            <p className="mb-3">
+              Thank you for visiting our Kariba District Camp Online
+              Registration Page! I am deeply grateful for your commitment, your
+              participation, and your faithful support as we prepare for this
+              blessed camp meeting. Your registration is not just a formality —
+              it is a step of faith, a sign that you are ready to grow, serve,
+              and fellowship together under God’s banner.
+            </p>
+            <p className="mb-3">
+              I warmly encourage you to keep this event lifted in your prayers.
+              Pray that every session, every message, every song, and every
+              gathering will draw us closer to Christ. I also invite you to go
+              beyond yourself — invite a friend, a neighbor, or a visitor to
+              join us. Let’s make this camp not only a time of personal revival
+              but also a powerful opportunity to share the love of Jesus with
+              others.
+            </p>
+            <p className="mb-3">
+              May the Lord bless you richly as we journey toward this camp
+              meeting. I look forward to seeing you there, growing together in
+              faith and mission!
+            </p>
+            <p className="mb-3">
+              With gratitude and blessings,
+              <br />
+              <strong>Pastor Ketani</strong>
+              <br />
+              Kariba District Pastor
+            </p>
+          </Card.Body>
+        </Card>
+      </Container>
+
+      {/* 2. 2025 Camp Speakers */}
+      <Container className="py-5 speakers-section">
+        <h2 className="text-center mb-4">2025 Camp Speakers</h2>
         <Row>
-          {speakers.map((spk, i) => (
-            <Col
-              key={i}
-              md={4}
-              className="d-flex align-items-stretch mb-4"
-              data-aos="fade-up"
-            >
-              <SpeakerCard {...spk} />
-            </Col>
-          ))}
+          {/* Adults Column */}
+          <Col md={6}>
+            <h4 className="mt-3">Adults</h4>
+            <ListGroup variant="flush">
+              <ListGroup.Item className="mb-2 p-3">
+                <strong>Conscious Mulube</strong>
+                <p className="mb-0 text-muted">(RC)</p>
+              </ListGroup.Item>
+              <ListGroup.Item className="mb-2 p-3">
+                <strong>Enock Chifamba</strong>
+                <p className="mb-0 text-muted">(ZEUC)</p>
+              </ListGroup.Item>
+              <ListGroup.Item className="mb-2 p-3">
+                <strong>Ronald Motsi</strong>
+                <p className="mb-0 text-muted">(EZC)</p>
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+
+          {/* Children Column */}
+          <Col md={6}>
+            <h4 className="mt-4">Children</h4>
+            <ListGroup variant="flush">
+              <ListGroup.Item className="mb-2 p-3">
+                <strong>Rumbidzai Amisi</strong>
+                <p className="mb-0 text-muted">(0–9)</p>
+              </ListGroup.Item>
+              <ListGroup.Item className="mb-2 p-3">
+                <strong>Tawanda Mavhurere</strong>
+                <p className="mb-0 text-muted">(10 +)</p>
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
         </Row>
       </Container>
     </>
