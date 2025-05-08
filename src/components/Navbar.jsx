@@ -1,10 +1,13 @@
+// File: src/components/Navbar.jsx
+
 import React, { useContext, useState } from "react";
 import { Navbar as BsNavbar, Nav, Container } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Avatar from "./Avatar";
 import SearchInput from "./SearchInput";
 import ThemeToggle from "./ThemeToggle";
+import Logo from "./Logo";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -22,18 +25,16 @@ export default function Navbar() {
     <BsNavbar expand="lg" className="navbar-custom" fixed="top" variant="dark">
       <Container fluid>
         {/* Brand/Logo */}
-        <Link to="/" className="navbar-brand brand-logo">
-          Kariba Camp
-        </Link>
+        <Logo />
 
-        {/* Hamburger */}
+        {/* Hamburger toggler */}
         <BsNavbar.Toggle
           aria-controls="navbar-nav"
           className={`custom-toggler ${menuOpen ? "" : "collapsed"}`}
           onClick={handleToggle}
         />
 
-        {/* Slide-in menu */}
+        {/* Slide‑in menu */}
         <BsNavbar.Collapse
           in={menuOpen}
           id="navbar-nav"
@@ -42,23 +43,33 @@ export default function Navbar() {
           {/* Left links */}
           <Nav className="me-auto">
             {!user && (
-              <Nav.Link as={Link} to="/" className="nav-link-custom">
+              <Nav.Link
+                onClick={() => navigate("/")}
+                className="nav-link-custom"
+              >
                 HOME
               </Nav.Link>
             )}
             {!user ? (
               <>
-                <Nav.Link as={Link} to="/login" className="nav-link-custom">
+                <Nav.Link
+                  onClick={() => navigate("/login")}
+                  className="nav-link-custom"
+                >
                   LOGIN
                 </Nav.Link>
-                <Nav.Link as={Link} to="/signup" className="nav-link-custom">
+                <Nav.Link
+                  onClick={() => navigate("/signup")}
+                  className="nav-link-custom"
+                >
                   SIGNUP
                 </Nav.Link>
               </>
             ) : (
               <Nav.Link
-                as={Link}
-                to={user.is_staff ? "/admin" : "/dashboard"}
+                onClick={() =>
+                  navigate(user.is_staff ? "/admin" : "/dashboard")
+                }
                 className="nav-link-custom"
               >
                 DASHBOARD
