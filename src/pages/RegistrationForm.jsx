@@ -1,4 +1,5 @@
 // File: src/pages/RegistrationForm.jsx
+
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Row, Col, Alert } from "react-bootstrap";
@@ -23,6 +24,8 @@ const bookOptions = [
   { value: "Health", label: "Health" },
 ];
 const tshirtSizes = ["S", "M", "L", "XL", "XXL"];
+const lessonLanguages = ["Shona", "English"];
+const ageGroups = ["0–5", "6–9", "10–12", "13+"];
 
 export default function RegistrationForm() {
   const { user } = useContext(AuthContext);
@@ -51,12 +54,11 @@ export default function RegistrationForm() {
     payment_method: "",
     comments: "",
   });
-  const [errors, setErrors] = useState({});
   const [networkError, setNetworkError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [existingId, setExistingId] = useState(null);
 
-  // Load existing registration
+  // Load existing registration if any
   useEffect(() => {
     regApi
       .getMyRegistration()
@@ -67,13 +69,12 @@ export default function RegistrationForm() {
         }
       })
       .catch(() => {
-        /* ignore */
+        /* ignore load errors */
       });
   }, []);
 
   const handleChange = (field, value) => {
     setForm((f) => ({ ...f, [field]: value }));
-    setErrors((e) => ({ ...e, [field]: null }));
   };
 
   const handleSubmit = async (e) => {
@@ -91,15 +92,9 @@ export default function RegistrationForm() {
       );
       navigate("/dashboard", { replace: true });
     } catch (err) {
-      // Validation errors from backend
-      if (err.response?.data) {
-        setErrors(err.response.data);
-      } else {
-        setNetworkError("Registration failed. Please try again later.");
-      }
-      toast.error("Registration failed: please try again.", {
-        autoClose: 3000,
-      });
+      const msg = err.message || "Registration failed. Please try again.";
+      setNetworkError(msg);
+      toast.error(msg, { autoClose: 3000 });
     } finally {
       setSubmitting(false);
     }
@@ -108,25 +103,22 @@ export default function RegistrationForm() {
   if (!user) return null;
 
   return (
-    <div className="registration-page">
-      <Card className="registration-card">
-        <Card.Header>
-          <Form.Text as="h2" className="fs-3 fw-bold">
-            Camp Registration
-          </Form.Text>
-          <Card.Subtitle className="fs-6 text-secondary">
-            Welcome Remarks
-          </Card.Subtitle>
+    <div className="registration-page py-5 d-flex justify-content-center">
+      <Card
+        className="registration-card shadow-sm rounded"
+        style={{ maxWidth: 700, width: "100%" }}
+      >
+        <Card.Header className="bg-white">
+          <h2 className="fs-3 fw-bold mb-1">Camp Registration</h2>
+          <p className="fs-6 text-secondary mb-0">Welcome Remarks</p>
         </Card.Header>
         <Card.Body>
           {networkError && <Alert variant="danger">{networkError}</Alert>}
 
           <Form onSubmit={handleSubmit}>
             {/* Personal Information */}
-            <Card.Subtitle className="fs-5 mt-4 mb-3">
-              Personal Information
-            </Card.Subtitle>
-            <Row>
+            <h5 className="fs-5 mt-4 mb-3">Personal Information</h5>
+            <Row className="g-3">
               <Col md={6}>
                 <Form.Group controlId="full_name">
                   <Form.Label>Full Name</Form.Label>
@@ -135,12 +127,8 @@ export default function RegistrationForm() {
                     value={form.full_name}
                     onChange={(e) => handleChange("full_name", e.target.value)}
                     disabled={submitting}
-                    isInvalid={!!errors.full_name}
                     required
                   />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.full_name?.[0]}
-                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -150,7 +138,6 @@ export default function RegistrationForm() {
                     value={form.campsite}
                     onChange={(e) => handleChange("campsite", e.target.value)}
                     disabled={submitting}
-                    isInvalid={!!errors.campsite}
                     required
                   >
                     <option value="">Select campsite</option>
@@ -160,53 +147,34 @@ export default function RegistrationForm() {
                       </option>
                     ))}
                   </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.campsite?.[0]}
-                  </Form.Control.Feedback>
                 </Form.Group>
+              </Col>
+              <Col xs={12}>
+                <Form.Label className="mt-3">ABC Books (optional)</Form.Label>
+                <div>
+                  {bookOptions.map((o) => (
+                    <Form.Check
+                      inline
+                      key={o.value}
+                      label={o.label}
+                      type="checkbox"
+                      checked={form.abc_books.includes(o.value)}
+                      onChange={() => {
+                        const arr = form.abc_books.includes(o.value)
+                          ? form.abc_books.filter((x) => x !== o.value)
+                          : [...form.abc_books, o.value];
+                        handleChange("abc_books", arr);
+                      }}
+                      disabled={submitting}
+                    />
+                  ))}
+                </div>
               </Col>
             </Row>
 
-            {/* ABC Books */}
-            <Card.Subtitle className="fs-5 mt-4 mb-3">
-              ABC Books (optional)
-            </Card.Subtitle>
-            <Form.Group controlId="abc_books" className="mb-3">
-              <div>
-                {bookOptions.map((o) => (
-                  <Form.Check
-                    inline
-                    key={o.value}
-                    label={o.label}
-                    id={`abc_${o.value}`}
-                    type="checkbox"
-                    value={o.value}
-                    checked={form.abc_books.includes(o.value)}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      handleChange(
-                        "abc_books",
-                        form.abc_books.includes(val)
-                          ? form.abc_books.filter((x) => x !== val)
-                          : [...form.abc_books, val]
-                      );
-                    }}
-                    disabled={submitting}
-                  />
-                ))}
-              </div>
-              {errors.abc_books && (
-                <div className="invalid-feedback d-block">
-                  {errors.abc_books[0]}
-                </div>
-              )}
-            </Form.Group>
-
-            {/* Contact Info */}
-            <Card.Subtitle className="fs-5 mt-4 mb-3">
-              Contact Information
-            </Card.Subtitle>
-            <Row>
+            {/* Contact & Emergency */}
+            <h5 className="fs-5 mt-4 mb-3">Contact & Emergency</h5>
+            <Row className="g-3">
               <Col md={6}>
                 <Form.Group controlId="phone">
                   <Form.Label>Phone</Form.Label>
@@ -215,12 +183,8 @@ export default function RegistrationForm() {
                     value={form.phone}
                     onChange={(e) => handleChange("phone", e.target.value)}
                     disabled={submitting}
-                    isInvalid={!!errors.phone}
                     required
                   />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.phone?.[0]}
-                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -231,18 +195,10 @@ export default function RegistrationForm() {
                     value={form.email}
                     onChange={(e) => handleChange("email", e.target.value)}
                     disabled={submitting}
-                    isInvalid={!!errors.email}
                     required
                   />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.email?.[0]}
-                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
-            </Row>
-
-            {/* Emergency & Church */}
-            <Row>
               <Col md={6}>
                 <Form.Group controlId="church">
                   <Form.Label>Church Affiliation</Form.Label>
@@ -251,12 +207,8 @@ export default function RegistrationForm() {
                     value={form.church}
                     onChange={(e) => handleChange("church", e.target.value)}
                     disabled={submitting}
-                    isInvalid={!!errors.church}
                     required
                   />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.church?.[0]}
-                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -269,14 +221,10 @@ export default function RegistrationForm() {
                       handleChange("emergency_name", e.target.value)
                     }
                     disabled={submitting}
-                    isInvalid={!!errors.emergency_name}
                     required
                   />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.emergency_name?.[0]}
-                  </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="emergency_phone" className="mt-3">
+                <Form.Group controlId="emergency_phone" className="mt-2">
                   <Form.Label>Emergency Contact Phone</Form.Label>
                   <Form.Control
                     type="text"
@@ -285,24 +233,18 @@ export default function RegistrationForm() {
                       handleChange("emergency_phone", e.target.value)
                     }
                     disabled={submitting}
-                    isInvalid={!!errors.emergency_phone}
                     required
                   />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.emergency_phone?.[0]}
-                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
 
-            {/* Participation & Special Needs */}
-            <Row>
+            {/* Participation Details */}
+            <h5 className="fs-5 mt-4 mb-3">Camp Participation</h5>
+            <Row className="g-3">
               <Col md={6}>
-                <Card.Subtitle className="fs-5 mt-4 mb-3">
-                  Participation Details
-                </Card.Subtitle>
-                <Form.Group controlId="visitors" className="mb-3">
-                  <Form.Label>Visitors</Form.Label>
+                <Form.Group controlId="visitors">
+                  <Form.Label>Bringing Visitors?</Form.Label>
                   <Form.Control
                     type="number"
                     value={form.visitors}
@@ -310,6 +252,8 @@ export default function RegistrationForm() {
                     disabled={submitting}
                   />
                 </Form.Group>
+              </Col>
+              <Col md={6}>
                 <Form.Check
                   type="checkbox"
                   label="Contributed Toward Goal"
@@ -319,13 +263,87 @@ export default function RegistrationForm() {
                   }
                   disabled={submitting}
                 />
-                {/* Additional participation fields… */}
+                <Form.Check
+                  type="checkbox"
+                  label="Need Lesson Materials"
+                  checked={form.lesson_materials}
+                  onChange={(e) =>
+                    handleChange("lesson_materials", e.target.checked)
+                  }
+                  disabled={submitting}
+                  className="mt-2"
+                />
+                {form.lesson_materials && (
+                  <>
+                    <Form.Select
+                      className="mt-2"
+                      value={form.lesson_language}
+                      onChange={(e) =>
+                        handleChange("lesson_language", e.target.value)
+                      }
+                      disabled={submitting}
+                    >
+                      <option value="">Language</option>
+                      {lessonLanguages.map((lang) => (
+                        <option key={lang} value={lang}>
+                          {lang}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    <Form.Select
+                      className="mt-2"
+                      value={form.child_age_group}
+                      onChange={(e) =>
+                        handleChange("child_age_group", e.target.value)
+                      }
+                      disabled={submitting}
+                    >
+                      <option value="">Age Group (if child)</option>
+                      {ageGroups.map((ag) => (
+                        <option key={ag} value={ag}>
+                          {ag}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </>
+                )}
               </Col>
               <Col md={6}>
-                <Card.Subtitle className="fs-5 mt-4 mb-3">
-                  Special Needs & Supplies
-                </Card.Subtitle>
-                <Form.Group controlId="dietary" className="mb-3">
+                <Form.Check
+                  type="checkbox"
+                  label="Need Accommodation"
+                  checked={form.accommodation}
+                  onChange={(e) =>
+                    handleChange("accommodation", e.target.checked)
+                  }
+                  disabled={submitting}
+                />
+                <Form.Check
+                  type="checkbox"
+                  label="Need Transport"
+                  checked={form.transport}
+                  onChange={(e) => handleChange("transport", e.target.checked)}
+                  disabled={submitting}
+                  className="mt-2"
+                />
+                <Form.Group controlId="activities" className="mt-2">
+                  <Form.Label>Activities to Participate</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={2}
+                    value={form.activities}
+                    onChange={(e) => handleChange("activities", e.target.value)}
+                    disabled={submitting}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            {/* Special Needs & Supplies */}
+            <h5 className="fs-5 mt-4 mb-3">Special Needs & Supplies</h5>
+            <Row className="g-3">
+              <Col md={6}>
+                <Form.Group controlId="dietary">
                   <Form.Label>Dietary Requirements</Form.Label>
                   <Form.Control
                     as="textarea"
@@ -335,8 +353,21 @@ export default function RegistrationForm() {
                     disabled={submitting}
                   />
                 </Form.Group>
+                <Form.Group controlId="bread_loaves" className="mt-2">
+                  <Form.Label>Bread Loaves per Day</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={form.bread_loaves}
+                    onChange={(e) =>
+                      handleChange("bread_loaves", +e.target.value)
+                    }
+                    disabled={submitting}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
                 <Form.Group controlId="tshirt_size">
-                  <Form.Label>T-Shirt Size</Form.Label>
+                  <Form.Label>Buy Camp T‑shirt?</Form.Label>
                   <Form.Select
                     value={form.tshirt_size}
                     onChange={(e) =>
@@ -356,9 +387,16 @@ export default function RegistrationForm() {
             </Row>
 
             {/* Other Information */}
-            <Card.Subtitle className="fs-5 mt-4 mb-3">
-              Other Information
-            </Card.Subtitle>
+            <h5 className="fs-5 mt-4 mb-3">Other Information</h5>
+            <Form.Group controlId="payment_method" className="mb-3">
+              <Form.Label>Payment Method</Form.Label>
+              <Form.Control
+                type="text"
+                value={form.payment_method}
+                onChange={(e) => handleChange("payment_method", e.target.value)}
+                disabled={submitting}
+              />
+            </Form.Group>
             <Form.Group controlId="comments" className="mb-3">
               <Form.Label>Comments / Special Requests</Form.Label>
               <Form.Control
@@ -370,9 +408,11 @@ export default function RegistrationForm() {
               />
             </Form.Group>
 
-            <LoadingButton loading={submitting} type="submit" className="mt-3">
-              {existingId ? "Update Registration" : "Submit Registration"}
-            </LoadingButton>
+            <div className="text-center">
+              <LoadingButton loading={submitting} type="submit">
+                {existingId ? "Update Registration" : "Submit Registration"}
+              </LoadingButton>
+            </div>
           </Form>
         </Card.Body>
       </Card>
