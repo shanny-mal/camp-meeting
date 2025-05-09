@@ -1,7 +1,12 @@
 // File: src/components/Navbar.jsx
 
 import React, { useContext, useState } from "react";
-import { Navbar as BsNavbar, Nav, Container } from "react-bootstrap";
+import {
+  Navbar as BsNavbar,
+  Nav,
+  Container,
+  NavDropdown,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Avatar from "./Avatar";
@@ -19,79 +24,96 @@ export default function Navbar() {
   const handleLogout = () => {
     logout();
     navigate("/login", { replace: true });
+    setMenuOpen(false);
+  };
+
+  const goTo = (path) => {
+    navigate(path);
+    setMenuOpen(false);
   };
 
   return (
-    <BsNavbar expand="lg" className="navbar-custom" fixed="top" variant="dark">
-      <Container fluid>
-        {/* Brand/Logo */}
-        <Logo />
+    <Container fluid className="p-0">
+      <BsNavbar
+        expand="lg"
+        collapseOnSelect
+        className="navbar-custom"
+        fixed="top"
+        variant="dark"
+        expanded={menuOpen}
+      >
+        <Container fluid className="px-2 px-md-3">
+          {/* Brand/Logo */}
+          <Logo className="me-auto me-lg-0 px-2 px-md-3" />
 
-        {/* Hamburger toggler */}
-        <BsNavbar.Toggle
-          aria-controls="navbar-nav"
-          className={`custom-toggler ${menuOpen ? "" : "collapsed"}`}
-          onClick={handleToggle}
-        />
+          {/* Hamburger toggler */}
+          <BsNavbar.Toggle
+            aria-controls="navbar-nav"
+            className="custom-toggler"
+            onClick={handleToggle}
+          />
 
-        {/* Slide‑in menu */}
-        <BsNavbar.Collapse
-          in={menuOpen}
-          id="navbar-nav"
-          className="custom-collapse"
-        >
-          {/* Left links */}
-          <Nav className="me-auto">
-            {!user && (
-              <Nav.Link
-                onClick={() => navigate("/")}
-                className="nav-link-custom"
-              >
-                HOME
-              </Nav.Link>
-            )}
-            {!user ? (
-              <>
+          {/* Slide‑in menu */}
+          <BsNavbar.Collapse
+            in={menuOpen}
+            id="navbar-nav"
+            className="custom-collapse"
+          >
+            {/* Left links */}
+            <Nav className="me-auto">
+              {!user && (
                 <Nav.Link
-                  onClick={() => navigate("/login")}
-                  className="nav-link-custom"
+                  onClick={() => goTo("/")}
+                  className="nav-link-custom px-2 px-md-3 py-3"
                 >
-                  LOGIN
+                  HOME
                 </Nav.Link>
+              )}
+              {!user ? (
+                <>
+                  <Nav.Link
+                    onClick={() => goTo("/login")}
+                    className="nav-link-custom px-2 px-md-3 py-3"
+                  >
+                    LOGIN
+                  </Nav.Link>
+                  <Nav.Link
+                    onClick={() => goTo("/signup")}
+                    className="nav-link-custom px-2 px-md-3 py-3"
+                  >
+                    SIGNUP
+                  </Nav.Link>
+                </>
+              ) : (
                 <Nav.Link
-                  onClick={() => navigate("/signup")}
-                  className="nav-link-custom"
+                  onClick={() => goTo(user.is_staff ? "/admin" : "/dashboard")}
+                  className="nav-link-custom px-2 px-md-3 py-3"
                 >
-                  SIGNUP
+                  DASHBOARD
                 </Nav.Link>
-              </>
-            ) : (
-              <Nav.Link
-                onClick={() =>
-                  navigate(user.is_staff ? "/admin" : "/dashboard")
-                }
-                className="nav-link-custom"
-              >
-                DASHBOARD
-              </Nav.Link>
-            )}
-          </Nav>
+              )}
+            </Nav>
 
-          {/* Right controls */}
-          <Nav className="ms-auto align-items-center">
-            <SearchInput onSearch={(q) => console.log("search", q)} />
-            <ThemeToggle />
-            {user && (
-              <Nav.Link
-                onClick={handleLogout}
-                className="nav-link-custom logout-link"
-              >
-                <Avatar username={user.username} />
-              </Nav.Link>
-            )}
-          </Nav>
-        </BsNavbar.Collapse>
-      </Container>
-    </BsNavbar>
+            {/* Right controls */}
+            <Nav className="ms-auto align-items-center">
+              <div className="px-2 px-md-3 py-3">
+                <SearchInput onSearch={(q) => console.log("search", q)} />
+              </div>
+              <div className="px-2 px-md-3 py-3">
+                <ThemeToggle />
+              </div>
+              {user && (
+                <Nav.Link
+                  onClick={handleLogout}
+                  className="nav-link-custom logout-link px-2 px-md-3 py-3"
+                >
+                  <Avatar username={user.username} />
+                </Nav.Link>
+              )}
+            </Nav>
+          </BsNavbar.Collapse>
+        </Container>
+      </BsNavbar>
+    </Container>
   );
 }
