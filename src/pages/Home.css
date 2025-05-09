@@ -1,4 +1,16 @@
+/* File: src/pages/Home.css */
+
 /* Full‑screen carousel & overlay */
+.home-carousel .carousel-item img {
+  /* Ensure fluid and constrained heights */
+  min-height: 60vh;
+}
+@media (min-width: 992px) {
+  .home-carousel .carousel-item img {
+    min-height: 100vh;
+  }
+}
+
 .home-carousel .carousel-caption {
   top: 50%;
   transform: translateY(-50%);
@@ -11,21 +23,22 @@
 /* Typewriter headline */
 .typing {
   color: #fff;
-  font-size: 2.5rem;
-  font-weight: bold;
   overflow: hidden;
   white-space: nowrap;
   border-right: .15em solid #fff;
   animation: typing 3s steps(30, end), blink-caret .75s step-end infinite;
 }
+/* Responsive font sizes */
+.typing.display-5 { font-size: 2rem; }
+@media (min-width: 768px) {
+  .typing.display-md-4 { font-size: 2.5rem; }
+}
+@media (min-width: 1200px) {
+  .typing.display-lg-3 { font-size: 3rem; }
+}
 
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
-}
-@keyframes blink-caret {
-  50% { border-color: transparent; }
-}
+@keyframes typing { from { width: 0; } to { width: 100%; } }
+@keyframes blink-caret { 50% { border-color: transparent; } }
 
 /* Fade‑in subheadline */
 .fade-in {
@@ -33,48 +46,37 @@
   animation: fadeIn 2s ease-in forwards;
   animation-delay: 3s;
 }
-
-@keyframes fadeIn {
-  to { opacity: 1; }
+/* Responsive subheadline font */
+.fade-in.fs-6 { font-size: 1rem; }
+@media (min-width: 768px) {
+  .fade-in.fs-md-5 { font-size: 1.25rem; }
 }
+
+@keyframes fadeIn { to { opacity: 1; } }
 
 /* Bouncing button */
 .bounce {
   animation: bounce 2s infinite 4s;
 }
-
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  0%,20%,50%,80%,100% { transform: translateY(0); }
   40% { transform: translateY(-10px); }
   60% { transform: translateY(-5px); }
 }
 
-/* Speaker cards hover */
-.speaker-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.speaker-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-}
-
-/* Container width for Welcome Remarks */
+/* Welcome card max-width */
 .home-welcome-card {
   max-width: 700px;
   margin: 2rem auto;
 }
 
-/* Speaker list rounded items */
+/* Speakers list styling */
 .speakers-section .list-group-item {
   border-radius: 0.25rem;
 }
 
-/* Ensure headings have consistent spacing */
+/* Consistent heading spacing */
 .speakers-section h4 {
   font-weight: 600;
-}
-
-/* (Optional) Fine‑tune Card padding */
-.speakers-section .list-group-item p {
-  font-size: 0.95rem;
+  margin-bottom: 1rem;
 }

@@ -39,38 +39,44 @@ export default function Home() {
   return (
     <>
       {/* Hero Carousel */}
-      <Carousel
-        fade
-        controls={false}
-        indicators={false}
-        interval={5000}
-        className="home-carousel"
-      >
-        {images.map((img, idx) => (
-          <Carousel.Item key={idx}>
-            <img
-              className="d-block w-100 vh-100"
-              src={img}
-              alt={`slide-${idx}`}
-              style={{ objectFit: "cover" }}
-            />
-            <Carousel.Caption>
-              <h1 className="typing">Welcome to the Kariba Camp Meeting</h1>
-              <p className="fade-in">August 10–16, 2025 | Kariba Venue</p>
-              <Button
-                variant="light"
-                onClick={handleClick}
-                className="bounce mt-3"
-              >
-                Get Started
-              </Button>
-            </Carousel.Caption>
-          </Carousel.Item>
-        ))}
-      </Carousel>
+      <Container fluid className="px-0">
+        <Carousel
+          fade
+          controls={false}
+          indicators={false}
+          interval={5000}
+          className="home-carousel"
+        >
+          {images.map((img, idx) => (
+            <Carousel.Item key={idx}>
+              <img
+                className="d-block w-100 img-fluid"
+                src={img}
+                alt={`slide-${idx}`}
+                style={{ objectFit: "cover" }}
+              />
+              <Carousel.Caption className="px-2 px-md-5 text-center text-md-start">
+                <h1 className="typing display-5 display-md-4 display-lg-3">
+                  Welcome to the Kariba Camp Meeting
+                </h1>
+                <p className="fade-in fs-6 fs-md-5">
+                  August 10–16, 2025 | Kariba Venue
+                </p>
+                <Button
+                  variant="light"
+                  onClick={handleClick}
+                  className="bounce mt-3 btn-lg btn-block btn-md-auto"
+                >
+                  Get Started
+                </Button>
+              </Carousel.Caption>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      </Container>
 
       {/* 1. Welcome Remarks */}
-      <Container>
+      <Container className="px-3 px-md-5 py-4">
         <Card className="shadow-sm rounded home-welcome-card mb-5">
           <Card.Header className="fs-4 fw-bold">Welcome Remarks</Card.Header>
           <Card.Body>
@@ -109,11 +115,11 @@ export default function Home() {
       </Container>
 
       {/* 2. 2025 Camp Speakers */}
-      <Container className="py-5 speakers-section">
+      <Container className="px-3 px-md-5 py-4 speakers-section">
         <h2 className="text-center mb-4">2025 Camp Speakers</h2>
         <Row>
           {/* Adults Column */}
-          <Col md={6}>
+          <Col xs={12} sm={6} md={6}>
             <h4 className="mt-3">Adults</h4>
             <ListGroup variant="flush">
               <ListGroup.Item className="mb-2 p-3">
@@ -132,7 +138,7 @@ export default function Home() {
           </Col>
 
           {/* Children Column */}
-          <Col md={6}>
+          <Col xs={12} sm={6} md={6}>
             <h4 className="mt-4">Children</h4>
             <ListGroup variant="flush">
               <ListGroup.Item className="mb-2 p-3">
