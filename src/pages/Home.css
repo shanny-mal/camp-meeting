@@ -80,3 +80,30 @@
   font-weight: 600;
   margin-bottom: 1rem;
 }
+
+/* Allow the headline to wrap and scale on phones */
+@media (max-width: 576px) {
+  .home-carousel .typing {
+    /* let it wrap onto multiple lines */
+    white-space: normal !important;
+    overflow: visible !important;
+    /* remove the blinking caret on small screens */
+    border-right: none !important;
+    /* scale the font down a bit */
+    font-size: 1.5rem !important;
+    /* center the text */
+    text-align: center;
+    /* remove the width animation */
+    animation: none !important;
+  }
+  
+  .home-carousel .typing::after {
+    content: none !important;
+  }
+
+  .home-carousel .carousel-caption {
+    /* ensure caption has enough width */
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
