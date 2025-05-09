@@ -107,3 +107,6 @@
     padding-right: 1rem;
   }
 }
+
+/* HelpPage.css (new) */
+.accordion-button { font-weight: 500; }

@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 
 import Home from "./pages/Home";
+import HelpPage from "./pages/HelpPage"; // ← import the new HelpPage
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import RegistrationForm from "./pages/RegistrationForm";
@@ -30,9 +31,9 @@ export default function App() {
             <Routes>
               {/* Public */}
               <Route path="/" element={<Home />} />
+              <Route path="/help" element={<HelpPage />} /> {/* ← new route */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-
               {/* Protected: registration & user */}
               <Route
                 path="/register"
@@ -50,7 +51,6 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
-
               {/* Admin only */}
               <Route
                 path="/admin"
@@ -60,7 +60,6 @@ export default function App() {
                   </AdminRoute>
                 }
               />
-
               {/* Catch-all */}
               <Route path="*" element={<NotFound />} />
             </Routes>

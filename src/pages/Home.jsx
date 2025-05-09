@@ -1,3 +1,5 @@
+// File: src/pages/Home.jsx
+
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -73,6 +75,35 @@ export default function Home() {
             </Carousel.Item>
           ))}
         </Carousel>
+      </Container>
+
+      {/* Getting Started Section */}
+      <Container className="px-3 px-md-5 py-4 mb-5">
+        <Card className="shadow-sm rounded">
+          <Card.Body>
+            <h4 className="fs-4 fw-bold">Getting Started</h4>
+
+            <h6 className="mt-3">Why register online?</h6>
+            <ul className="mb-3 ps-3">
+              <li>Estimate attendance for logistics and accommodation</li>
+              <li>Organize departments & special programs ahead of time</li>
+              <li>Track attendance and download reports for planning</li>
+              <li>Enjoy a smooth, well‑prepared camp meeting experience</li>
+            </ul>
+
+            <h6>How to Register</h6>
+            <ol className="mb-3 ps-3">
+              <li>Click Get Started / Register</li>
+              <li>Fill in your personal & participation details</li>
+              <li>Submit the form</li>
+              <li>Check email/WhatsApp for confirmation</li>
+            </ol>
+
+            <Button variant="primary" onClick={() => nav("/help")}>
+              Learn More
+            </Button>
+          </Card.Body>
+        </Card>
       </Container>
 
       {/* 1. Welcome Remarks */}

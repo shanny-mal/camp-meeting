@@ -21,15 +21,17 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleToggle = () => setMenuOpen((o) => !o);
+  const closeMenu = () => setMenuOpen(false);
+
   const handleLogout = () => {
     logout();
     navigate("/login", { replace: true });
-    setMenuOpen(false);
+    closeMenu();
   };
 
   const goTo = (path) => {
     navigate(path);
-    setMenuOpen(false);
+    closeMenu();
   };
 
   return (
@@ -43,7 +45,7 @@ export default function Navbar() {
         expanded={menuOpen}
       >
         <Container fluid className="px-2 px-md-3">
-          {/* Brand/Logo */}
+          {/* Brand/Logo (non-link) */}
           <Logo className="me-auto me-lg-0 px-2 px-md-3" />
 
           {/* Hamburger toggler */}
@@ -69,6 +71,12 @@ export default function Navbar() {
                   HOME
                 </Nav.Link>
               )}
+              <Nav.Link
+                onClick={() => goTo("/help")}
+                className="nav-link-custom px-2 px-md-3 py-3"
+              >
+                HELP
+              </Nav.Link>
               {!user ? (
                 <>
                   <Nav.Link
@@ -103,12 +111,28 @@ export default function Navbar() {
                 <ThemeToggle />
               </div>
               {user && (
-                <Nav.Link
-                  onClick={handleLogout}
-                  className="nav-link-custom logout-link px-2 px-md-3 py-3"
+                <NavDropdown
+                  title={<Avatar username={user.username} />}
+                  id="user-menu"
+                  align="end"
+                  className="px-2 px-md-3 py-3"
+                  onSelect={closeMenu}
                 >
-                  <Avatar username={user.username} />
-                </Nav.Link>
+                  <NavDropdown.Item
+                    onClick={() =>
+                      goTo(user.is_staff ? "/admin" : "/dashboard")
+                    }
+                  >
+                    Dashboard
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => goTo("/profile")}>
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={handleLogout}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
               )}
             </Nav>
           </BsNavbar.Collapse>
