@@ -14,12 +14,30 @@ export default function HelpPage() {
           <p>Warm Christian greetings to you all!</p>
           <p>
             We are excited to inform you that online registration for the
-            upcoming August Camp Meeting is now open. This year ... well in
-            advance.
+            upcoming August Camp Meeting is now open. This year, we are
+            introducing an online registration system to help the camp meeting
+            committee plan more effectively and ensure that all necessary
+            arrangements are made well in advance.
           </p>
           {/* full letter */}
           <p>
-            …Blessings,
+            Registration deadline: Please complete your registration by deadline
+            July 5, 2025 to give the committee enough time to finalize all
+            arrangements.
+            <br />
+            We encourage every church member, family, and youth to take this
+            step seriously and register as soon as possible. Let’s work together
+            to make this camp meeting a blessed and well-organized spiritual
+            experience!
+            <br />
+            For any questions or assistance with the registration process,
+            kindly contact camp committee or reach out to your local church
+            clerk.
+            <br />
+            Thank you for your cooperation and prayers. Let us prepare our
+            hearts for this great spiritual gathering!
+            <br />
+            Blessings,
             <br />
             <strong>Pastor Ketani</strong>
           </p>
